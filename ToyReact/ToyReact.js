@@ -1,3 +1,4 @@
+// 真实DOM节点
 class ElementWapper {
     constructor(type) {
         this.node = document.createElement(type)
@@ -6,13 +7,14 @@ class ElementWapper {
         this.node.setAttribute(name, value)
     }
     appendChild(vchild) {
-        this.node.appendChild(vchild)
+        vchild.mountTo(this.node)
     }
     mountTo(parent) {
         parent.appendChild(this.node)
     }
 }
 
+// 文本组件
 class TextWapper {
     constructor(content) {
         this.node = document.createTextNode(content)
@@ -22,13 +24,20 @@ class TextWapper {
     }
 }
 
+// 虚拟组件
 export class Component {
+    constructor() {
+        this.children = []
+    }
     setAttribute(name, value) {
         this[name] = value
     }
     mountTo(parent) {
         const node = this.render()
         node.mountTo(parent)
+    }
+    appendChild(vchild) {
+        this.children.push(vchild)
     }
 }
 
@@ -43,12 +52,24 @@ export let ToyReact = {
         for (const key in attr) {
             element.setAttribute(key, attr[key])
         }
-        for (let child of children) {
-            if (typeof child === 'string') {
-                child = new TextWapper(child)
+        const insertChild = (children) => {
+            for (let child of children) {
+                if (typeof child === 'object' && child instanceof Array) {
+                    insertChild(child)
+                } else {
+                    if (!(child instanceof ElementWapper)
+                        && !(child instanceof TextWapper)
+                        && !(child instanceof Component)) {
+                        child = String(child)
+                    }
+                    if (typeof child === 'string') {
+                        child = new TextWapper(child)
+                    }
+                    element.appendChild(child)
+                }
             }
-            child.mountTo(element)
         }
+        insertChild(children)
         return element
     },
     reander(vdom, parentNode) {

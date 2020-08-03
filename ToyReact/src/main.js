@@ -4,8 +4,16 @@ class Mycomponent extends Component {
     render() {
         return <div>
             <span>cool</span>
+            <div>
+                {true}
+                {this.children}
+            </div>
         </div>
     }
 }
 
-ToyReact.reander(<Mycomponent id="com" name="ppp" />, document.body)
+const a = <Mycomponent id="com" name="ppp">
+    <div>ul</div>
+</Mycomponent>
+
+ToyReact.reander(a, document.body)
