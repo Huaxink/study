@@ -5,7 +5,9 @@ module.exports = {
         main: './src/main.js'
     },
     plugins: [
-        new HtmlWebpackPlugin({ title: '输出' })
+        new HtmlWebpackPlugin({
+            template: './template/index.html'
+        })
     ],
     module: {
         rules: [
