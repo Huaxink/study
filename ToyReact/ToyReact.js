@@ -115,9 +115,6 @@ export class Component {
                 if (node1.type !== node2.type) {
                     return false
                 }
-                if (node1.key !== node2.key) {
-                    return false
-                }
 
                 if (node1.type === '#text') { // 如果是文本节点就看内容是否一致
                     return node1.content === node2.content
@@ -135,6 +132,10 @@ export class Component {
                     }
                 }
                 if (Object.keys(node1.props).length !== Object.keys(node2.props).length) {
+                    return false
+                }
+
+                if (node1.key !== node2.key) { // key变化了，强制更新
                     return false
                 }
                 return true
