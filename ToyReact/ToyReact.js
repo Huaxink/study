@@ -57,15 +57,17 @@ class ElementWapper {
             element.setAttribute(name, value)
         }
         for (let child of this.children) {
-            const currange = document.createRange();
-            if (element.children && element.children.length) {
-                currange.setStartAfter(element.lastChild)
-                currange.setEndAfter(element.lastChild)
-            } else {
-                currange.setStart(element, 0)
-                currange.setEnd(element, 0)
+            if (child) {
+                const currange = document.createRange();
+                if (element.children && element.children.length) {
+                    currange.setStartAfter(element.lastChild)
+                    currange.setEndAfter(element.lastChild)
+                } else {
+                    currange.setStart(element, 0)
+                    currange.setEnd(element, 0)
+                }
+                child.mountTo(currange)
             }
-            child.mountTo(currange)
         }
         range.insertNode(element)
     }
@@ -78,7 +80,7 @@ class TextWapper {
         this.type = '#text'
         this.children = []
         this.props = Object.create(null)
-        this.node = document.createTextNode(content)
+        this.dom = document.createTextNode(content)
     }
     get vdom() {
         return this
@@ -86,7 +88,7 @@ class TextWapper {
     mountTo(range) {
         this.range = range
         this.range.deleteContents()
-        this.range.insertNode(this.node)
+        this.range.insertNode(this.dom)
     }
 }
 
@@ -121,9 +123,9 @@ export class Component {
                 }
 
                 for (const name in node1.props) {
-                    // if (typeof node1.props[name] === 'function' && typeof node2.props[name] === 'function' && node1.props[name].toString() === node2.props[name].toString()) {
-                    //     continue
-                    // }
+                    if (typeof node1.props[name] === 'function' && typeof node2.props[name] === 'function' && node1.props[name].toString() === node2.props[name].toString()) {
+                        continue
+                    }
                     if (typeof node1.props[name] === 'object' && typeof node2.props[name] === 'object' && JSON.stringify(node1.props[name]) === JSON.stringify(node2.props[name])) {
                         continue
                     }
@@ -141,6 +143,7 @@ export class Component {
                 return true
             }
             const isSameTree = (node1, node2) => {
+                node1.range = node2.range  // 保存上次的挂载的地方
                 if (!isSameNode(node1, node2)) {
                     return false
                 }
@@ -200,7 +203,7 @@ export class Component {
                 }
             }
         }
-        if (!this.state && state) {
+        if (!this.state) {
             this.state = {}
         }
         merge(this.state, state)
@@ -253,6 +256,7 @@ function createElement(type, attr, ...children) {
                 }
                 if (child instanceof ElementWapper || child instanceof Component || child instanceof TextWapper) {
                     child.key = child.key || i
+                    child.parent = element
                 }
                 element.appendChild(child)
             }

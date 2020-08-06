@@ -1,16 +1,10 @@
 import ToyReact, { Component } from '../ToyReact'
 
-class Square extends Component {
-    render() {
-        return <span className="square" onClick={() => this.props.onClick()}>
-            {this.props.value || ''}
-        </span>
-    }
-}
-
 class Board extends Component {
     renderSquare(i) {
-        return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
+        return <span className="square" onClick={() => this.props.onClick(i)}>
+            {this.props.squares[i]}
+        </span>;
     }
 
     render() {
