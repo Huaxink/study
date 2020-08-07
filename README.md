@@ -34,12 +34,12 @@ const fiber = {
 所以有人说fiber是一个链表结构
 * 10. 为了让Reconciler分段执行，就需要一个调度器来分配任务，任务优先级分6种：
 
-* synchronous，同步执行
+* synchronous，首次渲染，同步执行
 * task，在next tick之前执行
-* animation，下一帧前执行
-* high，上面完了再执行，不久将来执行
-* low，上面都完了再执行，延迟执行
-* offscreen，下一次render或者scroll时执行
+* animation，下一帧前执行-requestAnimationFrame调度
+* high，上面完了再执行，不久将来执行-requestIdleCallback 回调执行的
+* low，上面都完了再执行，延迟执行-requestIdleCallback 回调执行的
+* offscreen，下一次render或者scroll时执行-requestIdleCallback 回调执行的
 
 * 11. 比如键盘输入，高优先级任务，可以直接打断diff低优先级任务，
 * 12. 但是在更新节点阶段，这个过程是不能被打断的，一次性批量更新的
