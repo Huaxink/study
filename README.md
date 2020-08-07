@@ -19,7 +19,7 @@
 * 4. 虚拟DOM用来比对更新差异，从而更新部分DOM节点，减少渲染数，而不是直接刷新全部节点，这样可以提升页面刷新性能；比对的是虚拟DOM 树，一般是平层比较，type, props, children，在react中，叫diff算法
 * 5. 以前的React的diff算法是向下递归比对两棵虚拟dom树，如果是树跨层级变化的话，按照树的层级来比对，这样的话，就会是O(n^2)复杂度，再加上需要找出更新的节点，就是O(n^3)复杂度，如果是平层比较的话，复杂度就是O(n)，这里的ToyReact就只是平层比对，没搞那么复杂
 * 6. 更新的DOM量很大，或者层级很深的话，其实js的执行时间就很长，这期间，用户还不能有交互，显然为了最小更新，需要占用更多js资源，顾此失彼，所有react就出了个Fiber算法，重构了react的虚拟dom更新
-* 7. Fiber远了就是利用浏览器的window.requestIdleCallback这个api，https://segmentfault.com/a/1190000018250127
+* 7. Fiber原理就是利用浏览器的window.requestIdleCallback这个api，https://segmentfault.com/a/1190000018250127
 * 8. 主要分三层，虚拟dom层，描述页面；Reconciler 层，负责调用生命周期方法，进行diff运算；renderer层，根据不同平台，渲染对应页面，浏览器和rn
 * 9. fiber是一个数据结构：
 
@@ -32,6 +32,7 @@ const fiber = {
 }
 ```
 所以有人说fiber是一个链表结构
+
 * 10. 为了让Reconciler分段执行，就需要一个调度器来分配任务，任务优先级分6种：
 
 * synchronous，首次渲染，同步执行
