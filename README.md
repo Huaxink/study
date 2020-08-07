@@ -44,8 +44,8 @@ const fiber = {
 
 * 11. 比如键盘输入，高优先级任务，可以直接打断diff低优先级任务，
 * 12. 但是在更新节点阶段，这个过程是不能被打断的，一次性批量更新的
-![img](./img/1.jpg)
+![img](https://github.com/Huaxink/study/blob/master/img/1.jpg)
 * 13. diff阶段做了拆分，每次做完一段，就把时间控制权交给主线程
-![img](./img/2.jpg)
+![img](https://github.com/Huaxink/study/blob/master/img/2.jpg)
 
 来自： http://www.ayqy.net/blog/dive-into-react-fiber/
