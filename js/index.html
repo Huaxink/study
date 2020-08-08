@@ -53,7 +53,10 @@
         // 整个js主程序也是一个宏任务
 
         // async函数在await之前的代码都是同步执行的，可以理解为await之前的代码属于new Promise时传入的代码，await之后的所有代码都是在Promise.then中的回调
+
+        // node时间循环跟版本有关，node10版本的时间循环，微任务是穿插在每个循环阶段执行，node12是和浏览器端的时间循环一样，每次执行一次宏任务后，就检查微任务，并执行微任务，直到微任务完毕，然后再执行宏任务
     </script>
+    <script src="./text.js"></script>
 </body>
 
 </html>
